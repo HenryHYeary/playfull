@@ -116,11 +116,11 @@ const PlaylistCreator: React.FC = () => {
   };
 
 
-  return (
-    <div className='min-h-screen bg-gradient-to-br from gray-900 via-purple-900 to-violet-800'>
-      <Header />
-    </div>
-  )
+  // return (
+  //   <div className='min-h-screen bg-gradient-to-br from gray-900 via-purple-900 to-violet-800'>
+
+  //   </div>
+  // )
 }
 
 export default PlaylistCreator;
