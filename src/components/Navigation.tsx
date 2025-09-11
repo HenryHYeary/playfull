@@ -50,7 +50,10 @@ export default function Navigation() {
                     ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
                     : "text-gray-300 hover:text-white hover:bg-white/5"
                 }`}
-              />
+              >
+                <item.icon className={`h-5 w-5 ${isActive ? "text-blue-400" : "text-gray-400 group-hover:text-white"}`} />
+                <span className='font-medium'>{item.label}</span>
+              </Link>
             </div>
           )
         })}
