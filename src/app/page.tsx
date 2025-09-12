@@ -3,7 +3,6 @@
 import React, { use, useState } from 'react';
 import { Search, Play, Pause, Plus, Heart, MoreHorizontal, Clock, Users, Shuffle, Volume2 } from "lucide-react";
 
-import Header from '@/components/Header';
 import Playlist from '@/components/Playlist';
 export interface TrackProps {
   id: string;
@@ -118,7 +117,11 @@ const PlaylistCreator: React.FC = () => {
 
 
   return (
-    <Playlist {...currentPlaylist} />
+    <div className='p-8'>
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+        <Playlist {...currentPlaylist} />
+      </div>
+    </div>
   )
 }
 
