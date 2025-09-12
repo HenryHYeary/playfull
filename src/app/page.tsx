@@ -4,7 +4,8 @@ import React, { use, useState } from 'react';
 import { Search, Play, Pause, Plus, Heart, MoreHorizontal, Clock, Users, Shuffle, Volume2 } from "lucide-react";
 
 import Header from '@/components/Header';
-interface Track {
+import Playlist from '@/components/Playlist';
+export interface TrackProps {
   id: string;
   title: string;
   artist: string;
@@ -14,7 +15,7 @@ interface Track {
   isPlaying?: boolean;
 }
 
-interface Playlist {
+export interface PlaylistProps {
   id: string;
   name: string;
   description: string;
@@ -27,7 +28,7 @@ interface Playlist {
 
 const PlaylistCreator: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentPlaylist, setCurrentPlaylist] = useState<Playlist>({
+  const [currentPlaylist, setCurrentPlaylist] = useState<PlaylistProps>({
     id: '1',
     name: 'My Awesome Playlist',
     description: 'Perfect vibes for coding sessions',
@@ -38,7 +39,7 @@ const PlaylistCreator: React.FC = () => {
     collaborators: 3
   });
 
-  const [playlistTracks, setPlaylistTracks] = useState<Track[]>([
+  const [playlistTracks, setPlaylistTracks] = useState<TrackProps[]>([
     {
       id: '1',
       title: 'Midnight City',
@@ -66,7 +67,7 @@ const PlaylistCreator: React.FC = () => {
     }
   ]);
 
-  const [searchResults, setSearchResults] = useState<Track[]>([
+  const [searchResults, setSearchResults] = useState<TrackProps[]>([
     {
       id: '4',
       title: 'Levels',
@@ -97,7 +98,7 @@ const PlaylistCreator: React.FC = () => {
     );
   }
 
-  const addToPlaylist = (track: Track) => {
+  const addToPlaylist = (track: TrackProps) => {
     if (!playlistTracks.find(t => t.id === track.id)) {
       setPlaylistTracks([...playlistTracks, track]);
       setCurrentPlaylist(prev => ({
@@ -116,11 +117,9 @@ const PlaylistCreator: React.FC = () => {
   };
 
 
-  // return (
-  //   <div className='min-h-screen bg-gradient-to-br from gray-900 via-purple-900 to-violet-800'>
-
-  //   </div>
-  // )
+  return (
+    <Playlist {...currentPlaylist} />
+  )
 }
 
 export default PlaylistCreator;
