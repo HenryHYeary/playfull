@@ -28,14 +28,6 @@ export default function Playlist({ name, coverUrl, description, trackCount, dura
             </div>
           </div>
         </div>
-        
-        <div className="p6 border-b border-white/10">
-          <div className="flex items-center space-x-4">
-            <button className="bg-green-500 hover:bg-green-400 rounded-full p-4 transition-colors">
-              <Play className="h-6 w-6 text-white ml-1" fill="white" />
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   )

@@ -1,7 +1,6 @@
 "use client";
 
-import React, { use, useState } from 'react';
-import { Search, Play, Pause, Plus, Heart, MoreHorizontal, Clock, Users, Shuffle, Volume2 } from "lucide-react";
+import React, { useState } from 'react';
 
 import Playlist from '@/components/Playlist';
 export interface TrackProps {
@@ -11,7 +10,6 @@ export interface TrackProps {
   album: string;
   duration: string;
   coverUrl: string;
-  isPlaying?: boolean;
 }
 
 export interface PlaylistProps {
@@ -46,7 +44,6 @@ const PlaylistCreator: React.FC = () => {
       album: 'Hurry Up, We\'re Dreaming',
       duration: '4:03',
       coverUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=60&h=60&fit=crop&crop=center',
-      isPlaying: true
     },
     {
       id: '2',
@@ -84,18 +81,6 @@ const PlaylistCreator: React.FC = () => {
       coverUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=60&h=60&fit=crop&crop=center'
     }
   ]);
-
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<string>('1');
-
-  const togglePlayPause = (trackId: string) => {
-    setCurrentlyPlaying(currentlyPlaying === trackId ? '' : trackId);
-    setPlaylistTracks(tracks => 
-      tracks.map(track => ({
-        ...track,
-        isPlaying: track.id === trackId ? !track.isPlaying : false
-      }))
-    );
-  }
 
   const addToPlaylist = (track: TrackProps) => {
     if (!playlistTracks.find(t => t.id === track.id)) {
