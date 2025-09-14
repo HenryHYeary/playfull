@@ -6,8 +6,8 @@ import Navigation from "@/components/Navigation";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Playfull - Create. Share. Play.",
-  description: "A platform to create, share, and play music.",
+  title: "Playfull - Create. Share. Collaborate.",
+  description: "A platform to create, share, and collaborate on playlists.",
 };
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}
+      <body className={inter.className}>
       <div className="min-h screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
         <Header />
         <div className="flex">

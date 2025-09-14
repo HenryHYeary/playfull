@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 
 import Playlist from '@/components/Playlist';
+import TrackList from '@/components/TrackList';
 export interface TrackProps {
   id: string;
   title: string;
@@ -21,6 +22,7 @@ export interface PlaylistProps {
   coverUrl: string;
   isPublic: boolean;
   collaborators?: number;
+  children?: React.ReactNode
 }
 
 const PlaylistCreator: React.FC = () => {
@@ -104,7 +106,9 @@ const PlaylistCreator: React.FC = () => {
   return (
     <div className='p-8'>
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-        <Playlist {...currentPlaylist} />
+        <Playlist {...currentPlaylist}>
+          <TrackList playlistTracks={playlistTracks} />
+        </Playlist>
       </div>
     </div>
   )

@@ -1,17 +1,17 @@
 import { PlaylistProps } from "@/app/page";
-import { Users, Play } from "lucide-react";
+import { Users } from "lucide-react";
 
-export default function Playlist({ name, coverUrl, description, trackCount, duration, collaborators }: PlaylistProps) {
+export default function Playlist({ name, coverUrl, description, trackCount, duration, collaborators, children }: PlaylistProps) {
   return (
     <div className="lg:col-span-2">
       <div className='bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden'>
-        <div className="flex items-end space-x-6">
+        <div className="flex items-start space-x-6">
           <img
             src={coverUrl}
             alt={name}
-            className='w-48 h-48 rounded-2xl shadow-2xl object-cover'
+            className='w-48 h-48 rounded-2xl object-cover shadow-2xl'
           />
-          <div className="text-white">
+          <div className="text-white pt-2">
             <p className="text-sm font-medium uppercase tracking-white opacity-80">Playlist</p>
             <h2 className='text-4xl font-bold mb-2'>{name}</h2>
             <p className='text-lg opacity-90 mb-4'>{description}</p>
@@ -26,6 +26,7 @@ export default function Playlist({ name, coverUrl, description, trackCount, dura
                 )
               }
             </div>
+            {children}
           </div>
         </div>
       </div>

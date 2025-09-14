@@ -11,7 +11,7 @@ export default function Header() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">Play<span className="text-yellow-200">full</span></h1>
-              <p className="text-purple-200">Create. Share. Play.</p>
+              <p className="text-purple-200">Create. Share. Collaborate.</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
