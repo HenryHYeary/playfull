@@ -105,9 +105,9 @@ const PlaylistCreator: React.FC = () => {
 
   return (
     <div className='p-8'>
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
         <Playlist {...currentPlaylist}>
-          <TrackList playlistTracks={playlistTracks} />
+          <TrackList playlistTracks={playlistTracks} removeFromPlaylist={removeFromPlaylist}/>
         </Playlist>
       </div>
     </div>
