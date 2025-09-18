@@ -9,7 +9,7 @@ interface TrackListProps {
 export default function TrackList({ playlistTracks, removeFromPlaylist }: TrackListProps) {
   return (
     <div className="p-2">
-      <div className="space-y-2">
+      <div className="space-y-3">
         {playlistTracks.map((track, index) => (
           <div
             key={track.id}

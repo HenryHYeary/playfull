@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 
 import Playlist from '@/components/Playlist';
+import SearchResults from '@/components/SearchResults';
 import TrackList from '@/components/TrackList';
 export interface TrackProps {
   id: string;
@@ -105,9 +106,10 @@ const PlaylistCreator: React.FC = () => {
 
   return (
     <div className='p-8'>
-      <div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
         <Playlist {...currentPlaylist}>
           <TrackList playlistTracks={playlistTracks} removeFromPlaylist={removeFromPlaylist}/>
+          <SearchResults />
         </Playlist>
       </div>
     </div>
