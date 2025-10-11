@@ -109,7 +109,6 @@ const PlaylistCreator: React.FC = () => {
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
         <Playlist {...currentPlaylist}>
           <TrackList playlistTracks={playlistTracks} removeFromPlaylist={removeFromPlaylist}/>
-          <SearchResults />
         </Playlist>
       </div>
     </div>

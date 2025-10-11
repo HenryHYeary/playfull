@@ -17,14 +17,7 @@ const navigationItems: NavItem[] = [
   { label: 'Your Library', icon: Library, href: '/library' },
   
   { label: 'Create Playlist', icon: PlusSquare, href: '/create', section: 'CREATE' },
-  { label: 'Liked Songs', icon: Heart, href: '/liked' },
-  
-  { label: 'Recently Played', icon: Headphones, href: '/recent', section: 'DISCOVER' },
-  { label: 'Trending', icon: TrendingUp, href: '/trending' },
-  { label: 'Made for You', icon: Music, href: '/made-for-you' },
-  
-  { label: 'Friends Activity', icon: Users, href: '/friends', section: 'SOCIAL' },
-  { label: 'Settings', icon: Settings, href: '/settings' },
+  { label: 'Liked Songs', icon: Heart, href: '/liked' },  
 ]
 
 export default function Navigation() {

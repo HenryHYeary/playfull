@@ -18,13 +18,6 @@ export default function Playlist({ name, coverUrl, description, trackCount, dura
             <div className='flex items-center space-x-6 text-sm opacity-80'>
               <span className='text-sm text-bold mb-5'>{trackCount} songs</span>
               <span className='text-sm text-bold mb-5'>{duration}</span>
-              {collaborators && (
-                <div className='flex items-center space-x-1'>
-                  <Users className='h-4 w-4 mb-5' />
-                  <span className='text-sm text-bold mb-5'>{collaborators}</span>
-                </div>
-                )
-              }
             </div>
             {children}
           </div>
