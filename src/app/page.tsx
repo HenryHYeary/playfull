@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Playlist from '@/components/Playlist';
-import SearchResults from '@/components/SearchResults';
 import TrackList from '@/components/TrackList';
+
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { signIn, signOut } from "next-auth/react";
+import { redirect } from 'next/navigation';
+
 export interface TrackProps {
   id: string;
   title: string;
@@ -27,7 +32,8 @@ export interface PlaylistProps {
 }
 
 const PlaylistCreator: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const { data: session, status } = useSession();
+
   const [currentPlaylist, setCurrentPlaylist] = useState<PlaylistProps>({
     id: '1',
     name: 'My Awesome Playlist',
@@ -103,6 +109,30 @@ const PlaylistCreator: React.FC = () => {
     }));
   };
 
+  useEffect(() => {
+    if (session) {
+      localStorage.setItem('session', JSON.stringify(session));
+    }
+  }, [session]);
+
+  useEffect(() => {
+    const cachedSession = localStorage.getItem('session');
+    if (cachedSession) {
+      // Use cached session
+      console.log(JSON.parse(cachedSession));
+    }
+  }, []);
+
+  if (status === "loading") return <div>Loading...</div>
+
+  if (status === "unauthenticated") {
+    return (
+     <>
+      Not signed in <br />
+      <button className="cursor-pointer" onClick={() => signIn()}>Sign in</button>
+     </>
+    )
+  }
 
   return (
     <div className='p-8'>
@@ -111,6 +141,7 @@ const PlaylistCreator: React.FC = () => {
           <TrackList playlistTracks={playlistTracks} removeFromPlaylist={removeFromPlaylist}/>
         </Playlist>
       </div>
+      <button className="cursor-pointer" onClick={() => signOut()}>Sign out</button>
     </div>
   )
 }
