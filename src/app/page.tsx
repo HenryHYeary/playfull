@@ -10,14 +10,26 @@ import Image from "next/image";
 import { signIn, signOut } from "next-auth/react";
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
+import { Session } from "next-auth";
+
 
 export interface TrackProps {
   id: string;
-  title: string;
+  name: string;
   artist: string;
-  album: string;
-  duration: string;
-  coverUrl: string;
+  album: {
+    images: {
+      url: string;
+      height: number;
+      width: number;
+    } [];
+    id: string;
+    name: string;
+  };
+  artists: {
+    name: string
+  } []
+  duration_ms: number;
 }
 
 export interface PlaylistProps {
