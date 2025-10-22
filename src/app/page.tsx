@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { signIn, signOut } from "next-auth/react";
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 export interface TrackProps {
   id: string;
@@ -42,64 +43,9 @@ const PlaylistCreator: React.FC = () => {
     duration: '47 min',
     coverUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop&crop=center',
     isPublic: false,
-    collaborators: 3
   });
 
-  const [playlistTracks, setPlaylistTracks] = useState<TrackProps[]>([
-    {
-      id: '1',
-      title: 'Midnight City',
-      artist: 'M83',
-      album: 'Hurry Up, We\'re Dreaming',
-      duration: '4:03',
-      coverUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=60&h=60&fit=crop&crop=center',
-    },
-    {
-      id: '2',
-      title: 'Strobe',
-      artist: 'Deadmau5',
-      album: 'For Lack of a Better Name',
-      duration: '10:32',
-      coverUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=60&h=60&fit=crop&crop=center'
-    },
-    {
-      id: '3',
-      title: 'Porter Robinson',
-      artist: 'Language',
-      album: 'Spitfire EP',
-      duration: '6:11',
-      coverUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=60&h=60&fit=crop&crop=center'
-    }
-  ]);
-
-  const [searchResults, setSearchResults] = useState<TrackProps[]>([
-    {
-      id: '4',
-      title: 'Levels',
-      artist: 'Avicii',
-      album: 'True',
-      duration: '3:18',
-      coverUrl: 'https://images.unsplash.com/photo-1571974599782-87624638275e?w=60&h=60&fit=crop&crop=center'
-    },
-    {
-      id: '5',
-      title: 'Animals',
-      artist: 'Martin Garrix',
-      album: 'Animals',
-      duration: '3:05',
-      coverUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=60&h=60&fit=crop&crop=center'
-    }
-  ]);
-
-  const addToPlaylist = (track: TrackProps) => {
-    if (!playlistTracks.find(t => t.id === track.id)) {
-      setPlaylistTracks([...playlistTracks, track]);
-      setCurrentPlaylist(prev => ({
-        ...prev,
-        trackCount: prev.trackCount + 1
-      }));
-    }
-  };
+  const [playlistTracks, setPlaylistTracks] = useState<TrackProps[]>([]);
 
   const removeFromPlaylist = (trackId: string) => {
     setPlaylistTracks(playlistTracks.filter(track => track.id !== trackId));
@@ -115,13 +61,48 @@ const PlaylistCreator: React.FC = () => {
     }
   }, [session]);
 
-  useEffect(() => {
-    const cachedSession = localStorage.getItem('session');
-    if (cachedSession) {
-      // Use cached session
-      console.log(JSON.parse(cachedSession));
+
+    useEffect(() => {
+    if (!session?.accessToken) return;
+
+    const fetchTop = async () => {
+      try {
+        const res = await fetch("https://api.spotify.com/v1/me/top/tracks?limit=3&offset=0", {
+          headers: {
+            Authorization: `Bearer ${session.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (res.status === 401) {
+          console.warn("Spotify returned 401. Token may be expired.");
+          return;
+        }
+
+        if (!res.ok) {
+          const err = await res.text();
+          throw new Error(`Spotify API error: ${res.status} ${err}`);
+        }
+
+        const data = await res.json();
+        setPlaylistTracks(data.items ?? data);
+      } catch (error) {
+        console.error("Failed to fetch top tracks:", error);
+      }
+    };
+    
+    fetchTop();
+  }, [session])
+
+  // Hacky useEffect hook, only for temporary aesthetic purposes, will pull playlists from API eventually
+   useEffect(() => {
+    if (playlistTracks.length > 0) {
+      setCurrentPlaylist({
+        ...currentPlaylist,
+        coverUrl: playlistTracks[0].album.images[0].url
+      })
     }
-  }, []);
+  }, [playlistTracks]);
 
   if (status === "loading") return <div>Loading...</div>
 
