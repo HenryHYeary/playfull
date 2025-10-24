@@ -63,6 +63,7 @@ const options: NextAuthOptions = {
         ...token,
         accessToken: account.access_token,
         refreshToken: account.refresh_token,
+        userId: account.providerAccountId,
         accessTokenExpires:
           Date.now() + (account.expires_in ? account.expires_in * 1000 : 3600 * 1000),
       };
