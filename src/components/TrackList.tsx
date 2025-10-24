@@ -18,7 +18,7 @@ export default function TrackList({ playlistTracks, removeFromPlaylist }: TrackL
       <div className="space-y-3">
         {playlistTracks.map((track, index) => (
           <div
-            key={track.album.id}
+            key={track.id}
             className="group flex items-center space-x-4 p-3 rounded-lg hover:bg-white/5 transition-colors"
           >
             <span className="text-gray-400 text-sm w-6 text-center">
@@ -48,7 +48,7 @@ export default function TrackList({ playlistTracks, removeFromPlaylist }: TrackL
             </div>
 
             <button
-              onClick={() => removeFromPlaylist(track.album.id)}
+              onClick={() => removeFromPlaylist(track.id)}
               className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-400 transition-all"
             >
               <Trash className="h-5 w-5" /> 
