@@ -16,8 +16,7 @@ const navigationItems: NavItem[] = [
   { label: 'Search', icon: Search, href: '/search' },
   { label: 'Your Library', icon: Library, href: '/library' },
   
-  { label: 'Create Playlist', icon: PlusSquare, href: '/create', section: 'CREATE' },
-  { label: 'Liked Songs', icon: Heart, href: '/liked' },  
+  { label: 'Create Playlist', icon: PlusSquare, href: '/create', section: 'CREATE' },  
 ]
 
 export default function Navigation() {
