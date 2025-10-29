@@ -1,8 +1,10 @@
+// Temporary page.tsx, will update after playlist creation functionality is implemented.
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
 
-import Playlist from '@/components/Playlist';
+import PlaylistPreview from '@/src/components/PlaylistPreview';
 import TrackList from '@/components/TrackList';
 
 import { useSession } from "next-auth/react";
@@ -32,7 +34,7 @@ export interface TrackProps {
   duration_ms: number;
 }
 
-export interface PlaylistProps {
+export interface PlaylistPreviewProps {
   id: string;
   name: string;
   description: string;
@@ -47,7 +49,7 @@ export interface PlaylistProps {
 const PlaylistCreator: React.FC = () => {
   const { data: session, status } = useSession();
 
-  const [currentPlaylist, setCurrentPlaylist] = useState<PlaylistProps>({
+  const [currentPlaylist, setCurrentPlaylist] = useState<PlaylistPreviewProps>({
     id: '1',
     name: 'My Awesome Playlist',
     description: 'Perfect vibes for coding sessions',
@@ -130,9 +132,9 @@ const PlaylistCreator: React.FC = () => {
   return (
     <div className='p-8'>
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-        <Playlist {...currentPlaylist}>
+        <PlaylistPreview {...currentPlaylist}>
           <TrackList playlistTracks={playlistTracks} removeFromPlaylist={removeFromPlaylist}/>
-        </Playlist>
+        </PlaylistPreview>
       </div>
       <button className="cursor-pointer" onClick={() => signOut()}>Sign out</button>
     </div>

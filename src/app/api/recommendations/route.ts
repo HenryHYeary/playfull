@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
       limit = 50,
     } = body;
 
-    // Build WHERE clause using Prisma's type-safe query builder
     const where: Prisma.TrackWhereInput = {};
 
     if (minDanceability !== undefined || maxDanceability !== undefined) {
@@ -76,20 +75,16 @@ export async function POST(request: NextRequest) {
       if (maxLiveness !== undefined) where.liveness.lte = maxLiveness;
     }
 
-    // Get count of matching tracks
     const totalCount = await prisma.track.count({ where });
 
-    // Get all matching track IDs (lightweight query)
     const matchingTracks = await prisma.track.findMany({
       where,
       select: { id: true },
     });
 
-    // Shuffle array and take random subset
     const shuffled = [...matchingTracks].sort(() => Math.random() - 0.5);
     const selectedIds = shuffled.slice(0, limit).map(t => t.id);
 
-    // Fetch full data for selected tracks
     const tracks = await prisma.track.findMany({
       where: {
         id: { in: selectedIds }

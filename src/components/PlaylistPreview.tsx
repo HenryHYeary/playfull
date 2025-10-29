@@ -1,7 +1,6 @@
-import { PlaylistProps } from "@/app/page";
-import { Users } from "lucide-react";
+import { PlaylistPreviewProps } from "@/app/page";
 
-export default function Playlist({ name, coverUrl, description, trackCount, duration, collaborators, children }: PlaylistProps) {
+export default function PlaylistPreview({ name, coverUrl, description, trackCount, duration, collaborators, children }: PlaylistPreviewProps) {
   return (
     <div className="lg:col-span-2 sm:col-span-1">
       <div className='bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden'>

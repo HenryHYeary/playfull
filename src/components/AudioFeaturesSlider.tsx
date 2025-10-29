@@ -98,7 +98,7 @@ const AUDIO_FEATURES: AudioFeature[] = [
   },
 ];
 
-export default function AudioFeaturesSlider() {
+export default async function AudioFeaturesSlider() {
   const [filters, setFilters] = useState<Filters>(
     AUDIO_FEATURES.reduce((acc, feature) => {
       acc[feature.key] = {
@@ -113,8 +113,78 @@ export default function AudioFeaturesSlider() {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [playlistName, setPlaylistName] = useState<string>("");
+  const [selectedTracks, setSelectedTracks] = useState<Set<string>>(new Set());
+  const [creatingPlaylist, setCreatingPlaylist] = useState<boolean>(false);
+  const [playlistSuccess, setPlaylistSuccess] = useState<string | null>(null);
 
-  const updateFilter = (key: string, type: string, value: string) => {
+  const toggleTrackSelection = (spotifyId: string) => {
+    setSelectedTracks(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(spotifyId)) {
+        newSet.delete(spotifyId);
+      } else {
+        newSet.add(spotifyId);
+      }
+      return newSet;
+    });
+  }
+
+  const selectAllTracks = () => {
+    setSelectedTracks(new Set(tracks.map(t => t.spotifyId)));
+  }
+
+  const deselectAllTracks = () => {
+    setSelectedTracks(new Set());
+  }
+
+  const createPlaylist = async () => {
+    if (!playlistName.trim()) {
+      setError("Please enter a playlist name");
+      return;
+    }
+
+    if (selectedTracks.size === 0) {
+      setError("Please select at least one track");
+      return;
+    }
+
+    setCreatingPlaylist(true);
+    setError(null);
+    setPlaylistSuccess(null);
+
+    try {
+      const response = await fetch("/api/playlists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playlistName: playlistName.trim(),
+          trackIds: Array.from(selectedTracks)
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setPlaylistSuccess(`Playlist created! ${data.trackCount} tracks added.`);
+        setPlaylistName("");
+        setSelectedTracks(new Set());
+
+        if (data.playlistUrl) {
+          window.open(data.playlistUrl, "_blank");
+        }
+      } else {
+        setError(data.error || "Failed to create playlist");
+      }
+    } catch (error) {
+      setError("Network error: " + (error instanceof Error ? error.message : "Unknown error"));
+    } finally {
+      setCreatingPlaylist(false);
+    }
+  }
+
+
+  const updateFilter = (key: string, type: "min" | "max", value: string) => {
     setFilters(prev => ({
       ...prev,
       [key]: {
@@ -280,7 +350,7 @@ export default function AudioFeaturesSlider() {
           <button 
             onClick={fetchRecommendations}
             disabled={loading || !Object.values(filters).some(f => f.enabled)}
-            className="w-full"
+            className="w-full cursor-pointer pt-5"
           >
             {loading ? "Loading..." : "Get Recommendations"}
           </button>
