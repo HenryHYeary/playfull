@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Track } from "@prisma/client";
 
 type FilterValue = {
@@ -98,7 +98,7 @@ const AUDIO_FEATURES: AudioFeature[] = [
   },
 ];
 
-export default async function AudioFeaturesSlider() {
+export default function AudioFeaturesSlider() {
   const [filters, setFilters] = useState<Filters>(
     AUDIO_FEATURES.reduce((acc, feature) => {
       acc[feature.key] = {
@@ -154,7 +154,7 @@ export default async function AudioFeaturesSlider() {
     setPlaylistSuccess(null);
 
     try {
-      const response = await fetch("/api/playlists", {
+      const response = await fetch("/api/playlist/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -373,7 +373,13 @@ export default async function AudioFeaturesSlider() {
                   key={idx}
                   className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-700 transition"
                 >
-                  <div>
+                  <input 
+                    type="checkbox"
+                    checked={selectedTracks.has(track.spotifyId)}
+                    onChange={() => toggleTrackSelection(track.spotifyId)}
+                    className="w-5 h-5 rounded cursor-pointer"
+                  />
+                  <div className="flex flex-col justify-center items-center">
                     <p className="font-semibold">{track.trackName}</p>
                     <p className="text-sm text-slate-400">{track.artistName}</p>
                   </div>
@@ -384,6 +390,17 @@ export default async function AudioFeaturesSlider() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div>
+              <button className="px-5" onClick={selectAllTracks}>Select All</button>
+              <button onClick={deselectAllTracks}>Deselect All</button>
+            </div>
+
+            <div className="flex flex-col items-start">
+              <label>Name Playlist</label>
+              <input type="text" className="bg-white rounded-md text-black w-md" onChange={(e) => setPlaylistName(e.target.value)} />
+              <button onClick={createPlaylist}>Create Playlist</button>
             </div>
           </div>
         )}

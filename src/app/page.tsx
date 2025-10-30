@@ -9,7 +9,7 @@ import TrackList from '@/components/TrackList';
 
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { Session } from "next-auth";
@@ -136,7 +136,6 @@ const PlaylistCreator: React.FC = () => {
           <TrackList playlistTracks={playlistTracks} removeFromPlaylist={removeFromPlaylist}/>
         </PlaylistPreview>
       </div>
-      <button className="cursor-pointer" onClick={() => signOut()}>Sign out</button>
     </div>
   )
 }

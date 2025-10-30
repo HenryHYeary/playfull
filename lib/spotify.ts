@@ -5,7 +5,7 @@ export async function createSpotifyPlaylist(
   trackIds: string[]
 ) {
   const createResponse = await fetch(
-    `https://api.spotify.com/v1/users/${userId}playlists`,
+    `https://api.spotify.com/v1/users/${userId}/playlists`,
     {
       method: "POST",
       headers: {

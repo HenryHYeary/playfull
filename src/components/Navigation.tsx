@@ -13,8 +13,9 @@ interface NavItem {
 
 const navigationItems: NavItem[] = [
   { label: 'Home', icon: Home, href: '/' },
-  { label: 'Search', icon: Search, href: '/search' },
-  { label: 'Your Library', icon: Library, href: '/library' },
+  // Add later
+  // { label: 'Search', icon: Search, href: '/search' },
+  // { label: 'Your Library', icon: Library, href: '/library' },
   
   { label: 'Create Playlist', icon: PlusSquare, href: '/create', section: 'CREATE' },  
 ]

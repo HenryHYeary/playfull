@@ -42,7 +42,7 @@ const refreshAccessToken = async (token: any) => {
   }
 };
 
-const options: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID || '',
@@ -80,6 +80,7 @@ const options: NextAuthOptions = {
         ...session,
         accessToken: (token as any).accessToken,
         refreshToken: (token as any).refreshToken,
+        userId: (token as any).userId,
         accessTokenExpires: (token as any).accessTokenExpires,
         error: (token as any).error,
       };
@@ -87,6 +88,6 @@ const options: NextAuthOptions = {
   },
 };
 
-const handler = NextAuth(options);
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST }

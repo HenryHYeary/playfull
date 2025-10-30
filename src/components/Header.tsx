@@ -1,4 +1,7 @@
-import { Search, Volume2 } from "lucide-react"
+"use client";
+
+import { Volume2 } from "lucide-react"
+import { signOut } from "next-auth/react"
 
 export default function Header() {
   return (
@@ -15,14 +18,15 @@ export default function Header() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="relative">
+            <button onClick={() => signOut()}>Sign Out</button>
+            {/* Add later <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <input
                 type="text"
                 placeholder="Search songs, artists, albums..."
                 className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full py-3 pl-10 pr-4 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent w-96"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
