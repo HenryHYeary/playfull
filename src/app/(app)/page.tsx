@@ -42,7 +42,7 @@ const PlaylistCreator: React.FC = () => {
   }, [status]);
 
   return (
-    <div className='p-8'>
+    <div className='p-8 z-0'>
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
         <PlaylistPreview playlists={playlists} />
       </div>
