@@ -1,27 +1,34 @@
-import { PlaylistPreviewProps } from "@/app/page";
+import React from "react";
+import { PlaylistPreviewProps } from "../app/page";
 
-export default function PlaylistPreview({ name, coverUrl, description, trackCount, duration, collaborators, children }: PlaylistPreviewProps) {
+type Props = {
+  playlists: PlaylistPreviewProps[];
+  children?: React.ReactNode;
+};
+
+export default function PlaylistPreview({ playlists, children }: Props) {
   return (
-    <div className="lg:col-span-2 sm:col-span-1">
-      <div className='bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden'>
-        <div className="flex items-start space-x-6 pt-3 pl-3">
-          <img
-            src={coverUrl}
-            alt={name}
-            className='w-48 h-48 rounded-2xl object-cover shadow-2xl'
-          />
-          <div className="text-white">
-            <p className="text-sm font-medium uppercase tracking-white opacity-80">Playlist</p>
-            <h2 className='text-4xl font-bold mb-2'>{name}</h2>
-            <p className='text-lg opacity-90 mb-4'>{description}</p>
-            <div className='flex items-center space-x-6 text-sm opacity-80'>
-              <span className='text-sm text-bold mb-5'>{trackCount} songs</span>
-              <span className='text-sm text-bold mb-5'>{duration}</span>
+    <>
+      {playlists.map((p) => (
+        <div className="lg:col-span-2 sm:col-span-1" key={p.id}>
+          <div className='bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden'>
+            <div className="flex items-start space-x-6 pt-3 pl-3">
+              <img
+                src={p.image}
+                alt={p.name}
+                className='w-48 h-48 rounded-2xl object-cover shadow-2xl'
+              />
+              <div className="text-white">
+                <h2 className='text-4xl font-bold mb-2'>{p.name}</h2>
+                <div className='flex items-center space-x-6 text-sm opacity-80'>
+                  <span className='text-sm font-bold mb-5'>{p.trackCount} songs</span>
+                </div>
+              </div>
             </div>
-            {children}
           </div>
         </div>
-      </div>
-    </div>
+      ))}
+      {children}
+    </>
   )
 }

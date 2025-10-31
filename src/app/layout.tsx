@@ -1,8 +1,5 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Header from "@/components/Header";
-import Navigation from "@/components/Navigation";
-
 import { Metadata } from "next";
 import AuthProvider from "./AuthProvider";
 
@@ -21,16 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider> 
-          <div className="min-h screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
-            <Header />
-            <div className="flex">
-              <Navigation />
-              <main className="flex-1">
-                {children}
-              </main>
-            </div>
-          </div>
+        <AuthProvider>
+          {children}
         </AuthProvider>
       </body>
     </html>

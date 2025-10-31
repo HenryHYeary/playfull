@@ -1,9 +1,27 @@
 "use client";
 
+import React, { useState } from "react";
 import { Volume2 } from "lucide-react"
 import { signOut } from "next-auth/react"
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const router = useRouter();
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function handleSignOut() {
+    if (signingOut) return;
+    setSigningOut(true);
+    try {
+      // prevent NextAuth from doing its own redirect; handle navigation client-side
+      await signOut({ redirect: false, callbackUrl: '/login' });
+      router.push('/login');
+    } catch (err) {
+      console.error('Sign out failed', err);
+      setSigningOut(false);
+    }
+  }
+
   return (
     <header className="bg-black/20 backdrop-blur-sm border-b border-white/10">
       <div className="max-w-10xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -18,15 +36,12 @@ export default function Header() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <button onClick={() => signOut()}>Sign Out</button>
-            {/* Add later <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <input
-                type="text"
-                placeholder="Search songs, artists, albums..."
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full py-3 pl-10 pr-4 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent w-96"
-              />
-            </div> */}
+            {!signingOut && <button
+              className="cursor-pointer"
+              onClick={handleSignOut}
+            >
+              Sign Out
+            </button>}
           </div>
         </div>
       </div>
