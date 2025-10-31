@@ -1,0 +1,16 @@
+name: Keep Supabase Awake
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"  # Every Monday at 8am UTC
+  workflow_dispatch:      # Allow manual runs
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Edge Function
+        run: |
+          echo "Pinging Supabase..."
+          curl -s -o /dev/null -w "%{http_code}" \
+            "https://zhyjahumzektinfpjvcp.supabase.co/functions/v1/ping"
