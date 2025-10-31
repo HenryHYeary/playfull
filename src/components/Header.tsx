@@ -6,12 +6,14 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Playfull_Logo from "@/public/Playfull_Logo.png";
-import MobileNav from "@/components/MobileNav";
 
-export default function Header() {
+type Props = {
+  openMobile?: () => void;
+}
+
+export default function Header({ openMobile }: Props) {
   const router = useRouter();
-  const [signingOut, setSigningOut] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);  
 
   async function handleSignOut() {
     if (signingOut) return;
@@ -33,7 +35,7 @@ export default function Header() {
             <button
               className="p-2 rounded-md hover:bg-white/5 md:hidden"
               aria-label="Open menu"
-              onClick={() => setMobileOpen(true)}
+              onClick={openMobile}
             >
               <Menu className="w-6 h-6 text-white" />
             </button>
@@ -55,8 +57,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-
-      <MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} />
     </header>
   );
 }

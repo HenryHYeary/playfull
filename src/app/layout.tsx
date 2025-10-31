@@ -8,6 +8,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Playfull - Create. Share. Collaborate.",
   description: "A fine-grained customizable playlist generator.",
+  icons: {
+    icon: { url: "/favicon.ico" },
+  },
 };
 
 export default function RootLayout({
