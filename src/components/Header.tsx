@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Volume2 } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Playfull_Logo from "@/public/Playfull_Logo.png";
 
 export default function Header() {
   const router = useRouter();
@@ -13,7 +15,6 @@ export default function Header() {
     if (signingOut) return;
     setSigningOut(true);
     try {
-      // prevent NextAuth from doing its own redirect; handle navigation client-side
       await signOut({ redirect: false, callbackUrl: '/login' });
       router.push('/login');
     } catch (err) {
@@ -23,12 +24,12 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-black/20 backdrop-blur-sm border-b border-white/10">
-      <div className="max-w-10xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <header className="bg-black/20 backdrop-blur-sm border-b border-white/10 w-full min-w-full overflow-hidden">
+      <div className="w-full px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="bg-gradient-to-r from-purple-500 to-pink-500 roundned-lg p-2">
-              <Volume2 className="h-8 w-8 text-white" />
+            <div className="bg-gradient-to-r from-purple-900 to-purple-200 rounded-sm p-2">
+              <Image src={Playfull_Logo} alt="Playfull Logo" height={60} width={60}/>
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">Play<span className="text-yellow-200">full</span></h1>

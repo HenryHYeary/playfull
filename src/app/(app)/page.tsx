@@ -4,15 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import PlaylistPreview from '@/src/components/PlaylistPreview';
+import { PlaylistPreviewProps } from '@/src/components/PlaylistPreview';
 
 import { useSession } from "next-auth/react";
-export interface PlaylistPreviewProps {
-  id: string,
-  name: string,
-  url: string,
-  trackCount: number,
-  image: string,
-}
 
 const PlaylistCreator: React.FC = () => {
   const { data: session, status } = useSession();

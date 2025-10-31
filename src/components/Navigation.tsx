@@ -24,7 +24,7 @@ export default function Navigation() {
   const pathname = usePathname();
 
   return (
-    <nav className='w-64 bg-black/20 backdrop-blur-sm border-r border-white/10 min-h-screen p-6'>
+    <nav className='w-fit bg-black/20 backdrop-blur-sm border-r border-white/10 min-h-screen p-6'>
       <div className='space-y-6'>
         {navigationItems.map((item, index) => {
           const isActive = pathname === item.href;

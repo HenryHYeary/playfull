@@ -1,10 +1,17 @@
 import React from "react";
-import { PlaylistPreviewProps } from "../app/page";
 
 type Props = {
   playlists: PlaylistPreviewProps[];
   children?: React.ReactNode;
 };
+
+export type PlaylistPreviewProps = {
+  id: string,
+  name: string,
+  url: string,
+  trackCount: number,
+  image: string,
+}
 
 export default function PlaylistPreview({ playlists, children }: Props) {
   return (

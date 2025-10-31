@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { Check, X, PlusCircle } from "lucide-react";
 import { Track } from "@prisma/client";
 
 type FilterValue = {
@@ -260,8 +261,8 @@ export default function AudioFeaturesSlider() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen text-white p-8 w-full">
+      <div className="max-w-6xl mx-auto w-full">
         <h1 className="text-4xl font-bold mb-2 text-center">
           Playfull Playlist Generator
         </h1>
@@ -367,7 +368,7 @@ export default function AudioFeaturesSlider() {
             <h2 className="text-2xl font-semibold mb-4">
               Found {tracks.length} tracks
             </h2>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
+            <div className="space-y-2 overflow-y-auto">
               {tracks.map((track, idx) => (
                 <div
                   key={idx}
@@ -392,15 +393,70 @@ export default function AudioFeaturesSlider() {
               ))}
             </div>
 
-            <div>
-              <button className="px-5" onClick={selectAllTracks}>Select All</button>
-              <button onClick={deselectAllTracks}>Deselect All</button>
-            </div>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-4">
+              <div className="flex pt-2 items-center space-x-3">
+                <button
+                  onClick={selectAllTracks}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 text-white rounded-md shadow-md transition"
+                >
+                  <PlusCircle className="w-4 h-4" />
+                  <span className="font-medium">Select all songs</span>
+                </button>
 
-            <div className="flex flex-col items-start">
-              <label>Name Playlist</label>
-              <input type="text" className="bg-white rounded-md text-black w-md" onChange={(e) => setPlaylistName(e.target.value)} />
-              <button onClick={createPlaylist}>Create Playlist</button>
+                <button
+                  onClick={deselectAllTracks}
+
+                  className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-200 rounded-md transition"
+                >
+                  <X className="w-4 h-4" />
+                  <span>Clear</span>
+                </button>
+
+                <span className="text-sm text-slate-400 ml-2">
+                  {selectedTracks.size} selected
+                </span>
+              </div>
+
+              <div className="flex flex-col items-start space-y-2">
+                <label className="text-md sm:pt-3 text-slate-300">Playlist name</label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    value={playlistName}
+                    onChange={(e) => setPlaylistName(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") createPlaylist(); }}
+                    placeholder="e.g. Morning Run"
+                    maxLength={80}
+                    className="bg-white text-black rounded-md px-3 py-2 w-56 focus:outline-none"
+                  />
+
+                  <button
+                    onClick={createPlaylist}
+                    disabled={creatingPlaylist}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-white ${
+                      creatingPlaylist ? "bg-gray-500 cursor-wait" : "bg-green-500 hover:bg-green-600"
+                    }`}
+                    aria-busy={creatingPlaylist}
+                  >
+                    {creatingPlaylist ? (
+                      // small inline spinner
+                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                      </svg>
+                    ) : (
+                      <Check className="w-4 h-4" />
+                    )}
+                    <span>{creatingPlaylist ? "Creating..." : "Create playlist"}</span>
+                  </button>
+                </div>
+
+                {playlistSuccess && (
+                  <p className="text-sm text-green-400 mt-1">{playlistSuccess}</p>
+                )}
+                {error && (
+                  <p className="text-sm text-red-400 mt-1">{error}</p>
+                )}
+              </div>
             </div>
           </div>
         )}
