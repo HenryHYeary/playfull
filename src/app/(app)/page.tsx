@@ -8,9 +8,8 @@ import { PlaylistPreviewProps } from '@/src/components/PlaylistPreview';
 
 import { useSession } from "next-auth/react";
 
-
 const PlaylistCreator: React.FC = () => {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [playlists, setPlaylists] = useState<PlaylistPreviewProps[]>([]);
 
