@@ -94,10 +94,32 @@ export const authOptions: NextAuthOptions = {
         error: token.error,
       };
     },
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith("/")) return `${baseUrl}${url}`
-      else if (new URL(url).origin === baseUrl) return url
-      return baseUrl
+        async redirect({ url, baseUrl }) {
+      if (url.startsWith("http://") || url.startsWith("https://")) {
+        const urlObj = new URL(url);
+        const baseUrlObj = new URL(baseUrl);
+        
+        // If same origin, allow
+        if (urlObj.origin === baseUrlObj.origin) {
+          return url;
+        }
+        return baseUrl;
+      }
+
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      
+      return baseUrl;
+    }
+  },
+  pages: {
+    signIn: '/',  
+    error: '/auth/error',
+  },
+  events: {
+    async signOut({ token }) {
+      console.log("User signed out");
     }
   },
 };
