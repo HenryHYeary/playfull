@@ -27,9 +27,9 @@ export default function PlaylistPreview({ playlists, children }: Props) {
                 className='w-48 h-48 rounded-2xl object-cover shadow-2xl'
               />
               <div className="text-white">
-                <h2 className='text-xl md:text-3xl font-bold mb-2'>{p.name}</h2>
+                <h2 className='text-sm sm:text-xl font-bold mb-2'>{p.name}</h2>
                 <div className='flex items-center space-x-6 text-sm opacity-80'>
-                  <span className='text-sm font-bold mb-5'>{p.trackCount} songs</span>
+                  <span className='text-xs sm:text-sm font-bold mb-5'>{p.trackCount} songs</span>
                 </div>
               </div>
             </div>
