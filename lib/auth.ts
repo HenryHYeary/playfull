@@ -1,12 +1,22 @@
 import { type NextAuthOptions } from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
 
+// Extend the JWT type
+declare module "next-auth/jwt" {
+  interface JWT {
+    accessToken?: string;
+    refreshToken?: string;
+    userId?: string;
+    accessTokenExpires?: number;
+    error?: string;
+  }
+}
+
 const refreshAccessToken = async (token: any) => {
   try {
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
     const basic = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
-
     const url = "https://accounts.spotify.com/api/token";
     const params = new URLSearchParams();
     params.append("grant_type", "refresh_token");
@@ -22,7 +32,6 @@ const refreshAccessToken = async (token: any) => {
     });
 
     const refreshed = await res.json();
-
     if (!res.ok) {
       throw refreshed;
     }
@@ -49,7 +58,8 @@ export const authOptions: NextAuthOptions = {
       authorization: {
         params: {
           scope:
-            "user-read-email user-top-read playlist-read-private playlist-modify-private playlist-modify-public",
+            "user-read-email playlist-read-private playlist-modify-private playlist-modify-public",
+          show_dialog: true,
         },
       },
     }),
@@ -57,32 +67,37 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, account }) {
-    if (account) {
-      return {
-        ...token,
-        accessToken: account.access_token,
-        refreshToken: account.refresh_token,
-        userId: account.providerAccountId,
-        accessTokenExpires:
-          Date.now() + (account.expires_in ? account.expires_in * 1000 : 3600 * 1000),
-      };
-    }
+      if (account) {
+        return {
+          ...token,
+          accessToken: account.access_token,
+          refreshToken: account.refresh_token,
+          userId: account.providerAccountId,
+          accessTokenExpires:
+            Date.now() + (account.expires_in ? account.expires_in * 1000 : 3600 * 1000),
+        };
+      }
 
-    if (Date.now() < (token as any).accessTokenExpires) {
-      return token;
-    }
+      if (Date.now() < (token.accessTokenExpires ?? 0)) {
+        return token;
+      }
 
-    return await refreshAccessToken(token);
-  },
+      return await refreshAccessToken(token);
+    },
     async session({ session, token }) {
       return {
         ...session,
-        accessToken: (token as any).accessToken,
-        refreshToken: (token as any).refreshToken,
-        userId: (token as any).userId,
-        accessTokenExpires: (token as any).accessTokenExpires,
-        error: (token as any).error,
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
+        userId: token.userId,
+        accessTokenExpires: token.accessTokenExpires,
+        error: token.error,
       };
     },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
+    }
   },
 };

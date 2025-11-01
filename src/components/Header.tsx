@@ -19,8 +19,7 @@ export default function Header({ openMobile }: Props) {
     if (signingOut) return;
     setSigningOut(true);
     try {
-      await signOut({ redirect: false, callbackUrl: '/login' });
-      router.push("/login");
+      await signOut({ redirect: true, callbackUrl: '/login' });
     } catch (err) {
       console.error('Sign out failed', err);
       setSigningOut(false);
