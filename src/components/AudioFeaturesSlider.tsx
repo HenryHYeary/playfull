@@ -297,11 +297,11 @@ export default function AudioFeaturesSlider() {
                         className="w-5 h-5 rounded cursor-pointer"
                       />
                       <div>
-                        <h3 className="font-semibold text-lg">{feature.label}</h3>
-                        <p className="text-sm text-slate-400">{feature.description}</p>
+                        <h3 className="font-semibold text-sm sm:text-lg">{feature.label}</h3>
+                        <p className="text-xs sm:text-sm text-slate-400">{feature.description}</p>
                       </div>
                     </div>
-                    <div className="text-sm text-slate-300">
+                    <div className="text-xs sm:text-sm text-slate-300">
                       {filter.min.toFixed(feature.step >= 1 ? 0 : 2)} - {filter.max.toFixed(feature.step >= 1 ? 0 : 2)}
                     </div>
                   </div>
