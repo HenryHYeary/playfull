@@ -9,15 +9,9 @@ import { PlaylistPreviewProps } from '@/src/components/PlaylistPreview';
 import { useSession } from "next-auth/react";
 
 const PlaylistCreator: React.FC = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const [playlists, setPlaylists] = useState<PlaylistPreviewProps[]>([]);
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push('/login');
-    }
-  }, [status, router]);
 
   useEffect(() => {
     if (status !== "authenticated") return;
