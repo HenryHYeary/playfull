@@ -13,11 +13,11 @@ const PlaylistCreator: React.FC = () => {
   const router = useRouter();
   const [playlists, setPlaylists] = useState<PlaylistPreviewProps[]>([]);
 
-  useEffect(() => {
-  if (status === "unauthenticated") {
-    router.push('/login');
-  }
-}, [status, router]);
+//   useEffect(() => {
+//   if (status === "unauthenticated") {
+//     router.push('/login');
+//   }
+// }, [status, router]);
 
   useEffect(() => {
     if (status !== "authenticated") return;
