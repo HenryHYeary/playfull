@@ -381,8 +381,8 @@ export default function AudioFeaturesSlider() {
                     className="w-5 h-5 rounded cursor-pointer"
                   />
                   <div className="flex flex-col justify-center items-center">
-                    <p className="font-semibold">{track.trackName}</p>
-                    <p className="text-sm text-slate-400">{track.artistName}</p>
+                    <p className="font-semibold text-xs sm:text-sm">{track.trackName}</p>
+                    <p className="text-xs sm:text-sm text-slate-400">{track.artistName}</p>
                   </div>
                   <div className="text-xs text-slate-400 text-right">
                     <div>D: {track.danceability?.toFixed(2)}</div>
@@ -400,7 +400,7 @@ export default function AudioFeaturesSlider() {
                   className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 text-white rounded-md shadow-md transition"
                 >
                   <PlusCircle className="w-4 h-4" />
-                  <span className="font-medium">Select all songs</span>
+                  <span className="font-medium text-xs sm:text-lg">Select all songs</span>
                 </button>
 
                 <button
@@ -409,7 +409,7 @@ export default function AudioFeaturesSlider() {
                   className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-200 rounded-md transition"
                 >
                   <X className="w-4 h-4" />
-                  <span>Clear</span>
+                  <span className="text-xs sm:text-lg">Clear</span>
                 </button>
 
                 <span className="text-sm text-slate-400 ml-2">
@@ -418,7 +418,7 @@ export default function AudioFeaturesSlider() {
               </div>
 
               <div className="flex flex-col items-start space-y-2">
-                <label className="text-md sm:pt-3 text-slate-300">Playlist name</label>
+                <label className="text-sm sm:text-lg sm:pt-3 text-slate-300">Playlist name</label>
                 <div className="flex items-center space-x-2">
                   <input
                     value={playlistName}
@@ -446,7 +446,7 @@ export default function AudioFeaturesSlider() {
                     ) : (
                       <span></span>
                     )}
-                    <span>{creatingPlaylist ? "Creating..." : "Create"}</span>
+                    <span className="text-sm sm:text-lg">{creatingPlaylist ? "Creating..." : "Create"}</span>
                   </button>
                 </div>
 
