@@ -16,7 +16,7 @@ export type PlaylistPreviewProps = {
 export default function PlaylistPreview({ playlists, children }: Props) {
   return (
     <>
-      {playlists.map((p) => (
+      {playlists.length ? playlists.map((p) => (
         <div className="lg:col-span-2 sm:col-span-1" key={p.id}>
           <div className='bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 relative z-0'>
             <div className="flex items-start space-x-6 pt-3 pl-3">
@@ -34,7 +34,9 @@ export default function PlaylistPreview({ playlists, children }: Props) {
             </div>
           </div>
         </div>
-      ))}
+      )) : 
+        <div className="justify-center items-center">You have no playlists. Why not create some?</div>
+      }
       {children}
     </>
   )
