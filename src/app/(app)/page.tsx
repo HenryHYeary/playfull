@@ -14,6 +14,12 @@ const PlaylistCreator: React.FC = () => {
   const [playlists, setPlaylists] = useState<PlaylistPreviewProps[]>([]);
 
   useEffect(() => {
+  if (status === "unauthenticated") {
+    router.push('/login');
+  }
+}, [status, router]);
+
+  useEffect(() => {
     if (status !== "authenticated") return;
 
     const controller = new AbortController();
