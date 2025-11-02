@@ -60,7 +60,6 @@ export const authOptions: NextAuthOptions = {
           scope:
             "user-read-email user-read-private playlist-read-private playlist-modify-private playlist-modify-public",
           show_dialog: true,
-          redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/spotify`,
         },
       },
     }),
