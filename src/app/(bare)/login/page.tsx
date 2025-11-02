@@ -3,8 +3,8 @@
 import React from 'react';
 import { signIn } from 'next-auth/react';
 
-function handleSignIn() {
-  signIn('spotify', { callbackUrl: `${window.location.origin}/`, redirect: true });
+async function handleSignIn() {
+  await signIn('spotify', { callbackUrl: "/", redirect: true });
 }
 
 export default function LoginPage() {

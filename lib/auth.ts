@@ -62,6 +62,7 @@ export const authOptions: NextAuthOptions = {
           show_dialog: true,
         },
       },
+      checks: ["pkce", "state"]
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
@@ -70,9 +71,9 @@ export const authOptions: NextAuthOptions = {
       name: `__Secure-next-auth.session-token`,
       options: {
         httpOnly: true,
-        sameSite: 'lax', // Critical for Safari
+        sameSite: 'lax',
         path: '/',
-        secure: true, // Must be true in production
+        secure: true, 
       },
     },
     callbackUrl: {
