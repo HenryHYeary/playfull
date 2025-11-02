@@ -46,7 +46,7 @@ export default function Header({ openMobile }: Props) {
               <p className="text-purple-200">Create. Share. Inspire.</p>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 text-white font-semibold">
             {!signingOut && <button
               className="cursor-pointer"
               onClick={handleSignOut}

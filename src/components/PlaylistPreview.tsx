@@ -36,8 +36,8 @@ export default function PlaylistPreview({ playlists, children }: Props) {
           </div>
         </div>
       )) : (
-        <div className="justify-center items-center">
-          You have no playlists. Why not create some? <span onClick={() => redirect("/create")} className="justify-center items-center underline">Create a playlist</span>
+        <div className="justify-center items-center text-white font-semibold">
+          You have no playlists. Why not create some? <span onClick={() => redirect("/create")} className="justify-center items-center underline cursor-pointer">Create a playlist</span>
         </div>
       )}
       {children}

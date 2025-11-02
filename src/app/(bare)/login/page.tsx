@@ -9,7 +9,7 @@ function handleSignIn() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-black">
       <div className="text-center space-y-8 max-w-md">
 
         <div className="flex justify-center">
@@ -40,7 +40,7 @@ export default function LoginPage() {
 
         <button
           onClick={handleSignIn}
-          className="group relative w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-green-500/50"
+          className="group relative w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-green-500/50 cursor-pointer"
         >
           <div className="flex items-center justify-center gap-3">
             <svg 
