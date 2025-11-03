@@ -51,7 +51,6 @@ const refreshAccessToken = async (token: any) => {
 };
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
   providers: [
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID || '',
@@ -67,35 +66,20 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  cookies: {
+  cookies: process.env.NODE_ENV === "production" ? {
     sessionToken: {
       name: `__Secure-next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: true, 
-      },
+      options: { httpOnly: true, sameSite: 'lax', path: '/', secure: true },
     },
     callbackUrl: {
       name: `__Secure-next-auth.callback-url`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: true,
-      },
+      options: { httpOnly: true, sameSite: 'lax', path: '/', secure: true },
     },
     csrfToken: {
       name: `__Host-next-auth.csrf-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: true,
-      },
+      options: { httpOnly: true, sameSite: 'lax', path: '/', secure: true },
     },
-  },
+  } : undefined,
   callbacks: {
     async jwt({ token, account }) {
       if (account) {

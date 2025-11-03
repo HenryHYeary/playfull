@@ -25,6 +25,8 @@ export async function POST(request: NextRequest) {
       limit = 50,
     } = body;
 
+    const safeLimit = Math.min(Math.max(1, parseInt(limit) || 50), 100);
+
     const where: Prisma.TrackWhereInput = {};
 
     if (minDanceability !== undefined || maxDanceability !== undefined) {
@@ -32,43 +34,36 @@ export async function POST(request: NextRequest) {
       if (minDanceability !== undefined) where.danceability.gte = minDanceability;
       if (maxDanceability !== undefined) where.danceability.lte = maxDanceability;
     }
-
     if (minEnergy !== undefined || maxEnergy !== undefined) {
       where.energy = {};
       if (minEnergy !== undefined) where.energy.gte = minEnergy;
       if (maxEnergy !== undefined) where.energy.lte = maxEnergy;
     }
-
     if (minValence !== undefined || maxValence !== undefined) {
       where.valence = {};
       if (minValence !== undefined) where.valence.gte = minValence;
       if (maxValence !== undefined) where.valence.lte = maxValence;
     }
-
     if (minTempo !== undefined || maxTempo !== undefined) {
       where.tempo = {};
       if (minTempo !== undefined) where.tempo.gte = minTempo;
       if (maxTempo !== undefined) where.tempo.lte = maxTempo;
     }
-
     if (minAcousticness !== undefined || maxAcousticness !== undefined) {
       where.acousticness = {};
       if (minAcousticness !== undefined) where.acousticness.gte = minAcousticness;
       if (maxAcousticness !== undefined) where.acousticness.lte = maxAcousticness;
     }
-
     if (minInstrumentalness !== undefined || maxInstrumentalness !== undefined) {
       where.instrumentalness = {};
       if (minInstrumentalness !== undefined) where.instrumentalness.gte = minInstrumentalness;
       if (maxInstrumentalness !== undefined) where.instrumentalness.lte = maxInstrumentalness;
     }
-
     if (minSpeechiness !== undefined || maxSpeechiness !== undefined) {
       where.speechiness = {};
       if (minSpeechiness !== undefined) where.speechiness.gte = minSpeechiness;
       if (maxSpeechiness !== undefined) where.speechiness.lte = maxSpeechiness;
     }
-
     if (minLiveness !== undefined || maxLiveness !== undefined) {
       where.liveness = {};
       if (minLiveness !== undefined) where.liveness.gte = minLiveness;
@@ -77,32 +72,81 @@ export async function POST(request: NextRequest) {
 
     const totalCount = await prisma.track.count({ where });
 
-    const matchingTracks = await prisma.track.findMany({
-      where,
-      select: { id: true },
-    });
+    const conditions: Prisma.Sql[] = [];
+    
+    if (minDanceability !== undefined) {
+      conditions.push(Prisma.sql`danceability >= ${minDanceability}`);
+    }
+    if (maxDanceability !== undefined) {
+      conditions.push(Prisma.sql`danceability <= ${maxDanceability}`);
+    }
+    if (minEnergy !== undefined) {
+      conditions.push(Prisma.sql`energy >= ${minEnergy}`);
+    }
+    if (maxEnergy !== undefined) {
+      conditions.push(Prisma.sql`energy <= ${maxEnergy}`);
+    }
+    if (minValence !== undefined) {
+      conditions.push(Prisma.sql`valence >= ${minValence}`);
+    }
+    if (maxValence !== undefined) {
+      conditions.push(Prisma.sql`valence <= ${maxValence}`);
+    }
+    if (minTempo !== undefined) {
+      conditions.push(Prisma.sql`tempo >= ${minTempo}`);
+    }
+    if (maxTempo !== undefined) {
+      conditions.push(Prisma.sql`tempo <= ${maxTempo}`);
+    }
+    if (minAcousticness !== undefined) {
+      conditions.push(Prisma.sql`acousticness >= ${minAcousticness}`);
+    }
+    if (maxAcousticness !== undefined) {
+      conditions.push(Prisma.sql`acousticness <= ${maxAcousticness}`);
+    }
+    if (minInstrumentalness !== undefined) {
+      conditions.push(Prisma.sql`instrumentalness >= ${minInstrumentalness}`);
+    }
+    if (maxInstrumentalness !== undefined) {
+      conditions.push(Prisma.sql`instrumentalness <= ${maxInstrumentalness}`);
+    }
+    if (minSpeechiness !== undefined) {
+      conditions.push(Prisma.sql`speechiness >= ${minSpeechiness}`);
+    }
+    if (maxSpeechiness !== undefined) {
+      conditions.push(Prisma.sql`speechiness <= ${maxSpeechiness}`);
+    }
+    if (minLiveness !== undefined) {
+      conditions.push(Prisma.sql`liveness >= ${minLiveness}`);
+    }
+    if (maxLiveness !== undefined) {
+      conditions.push(Prisma.sql`liveness <= ${maxLiveness}`);
+    }
 
-    const shuffled = [...matchingTracks].sort(() => Math.random() - 0.5);
-    const selectedIds = shuffled.slice(0, limit).map(t => t.id);
+    // Build the WHERE clause safely
+    const whereClause = conditions.length > 0 
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
+      : Prisma.empty;
 
-    const tracks = await prisma.track.findMany({
-      where: {
-        id: { in: selectedIds }
-      },
-      select: {
-        spotifyId: true,
-        trackName: true,
-        artistName: true,
-        danceability: true,
-        energy: true,
-        valence: true,
-        tempo: true,
-        acousticness: true,
-        instrumentalness: true,
-        speechiness: true,
-        liveness: true,
-      }
-    });
+    // Fetch random tracks using safe parameterized query
+    const tracks = await prisma.$queryRaw<any[]>`
+      SELECT 
+        "spotifyId",
+        "trackName",
+        "artistName",
+        danceability,
+        energy,
+        valence,
+        tempo,
+        acousticness,
+        instrumentalness,
+        speechiness,
+        liveness
+      FROM "Track"
+      ${whereClause}
+      ORDER BY RANDOM()
+      LIMIT ${safeLimit}
+    `;
 
     return NextResponse.json({
       success: true,
