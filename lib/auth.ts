@@ -102,10 +102,10 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       return {
         ...session,
-        accessToken: token.accessToken,
-        refreshToken: token.refreshToken,
-        userId: token.userId,
-        accessTokenExpires: token.accessTokenExpires,
+        user: {
+          ...session.user,
+          id: token.userId
+        },
         error: token.error,
       };
     },
@@ -114,7 +114,6 @@ export const authOptions: NextAuthOptions = {
         const urlObj = new URL(url);
         const baseUrlObj = new URL(baseUrl);
         
-        // If same origin, allow
         if (urlObj.origin === baseUrlObj.origin) {
           return url;
         }

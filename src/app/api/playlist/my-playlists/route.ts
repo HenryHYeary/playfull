@@ -1,19 +1,17 @@
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+    const accessToken = token?.accessToken;
     
-    if (!session?.accessToken) {
+    if (!token?.accessToken) {
       return NextResponse.json(
         { success: false, error: 'Not authenticated' },
         { status: 401 }
       );
     }
-
-    const accessToken = session.accessToken as string;
 
     const response = await fetch(
       'https://api.spotify.com/v1/me/playlists?limit=5',

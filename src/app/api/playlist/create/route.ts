@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import { createSpotifyPlaylist } from "@/lib/spotify";
-import { authOptions } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET
+    })
 
-    if (!session?.accessToken) {
+    if (!token?.accessToken || !token?.userId) {
       return NextResponse.json(
         { success: false, error: "Not authenticated" },
         { status: 401 }
@@ -25,8 +27,8 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await createSpotifyPlaylist(
-      session.accessToken as string,
-      session.userId as string,
+      token.accessToken as string,
+      token.userId as string,
       playlistName,
       trackIds
     )
