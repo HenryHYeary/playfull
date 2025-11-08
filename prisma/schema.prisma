@@ -8,21 +8,23 @@ datasource db {
 }
 
 model Track {
-  id                  String @id @default(cuid())
-  spotifyId           String @unique
-  trackName           String
-  artistName          String
-  danceability        Float?
-  energy              Float?
-  speechiness         Float?
-  acousticness        Float?
-  instrumentalness    Float?
-  liveness            Float?
-  valence             Float?
-  tempo               Float?
-  loudness            Float?
-  durationMs          Int?
-  popularity          Int?
+  id               String @id @default(cuid())
+  spotifyId        String @unique
+  trackName        String
+  artistName       String
+  language         String?
+  genres           String[]
+  danceability     Float?
+  energy           Float?
+  speechiness      Float?
+  acousticness     Float?
+  instrumentalness Float?
+  liveness         Float?
+  valence          Float?
+  tempo            Float?
+  loudness         Float?
+  durationMs       Int?
+  popularity       Int?
 
   @@index([danceability, energy, valence, tempo])
 }

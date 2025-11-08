@@ -172,7 +172,7 @@ export default function AudioFeaturesSlider() {
         setSelectedTracks(new Set());
 
         if (data.playlistUrl) {
-          window.open(data.playlistUrl, "_blank");
+          window.location.href = data.playlistUrl;
         }
       } else {
         setError(data.error || "Failed to create playlist");
