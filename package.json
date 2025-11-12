@@ -10,10 +10,14 @@
     "load-dataset": "tsx scripts/load-dataset.ts",
     "prisma:generate": "npx prisma generate",
     "prisma:push": "npx prisma db push",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "populate-lang-and-genres": "tsx scripts/populate-lang-and-genres.ts",
+    "detect-language-locally": "tsx scripts/detect-language-locally.ts",
+    "migrate-local-db-to-prod-db": "tsx scripts/migrate-local-db-to-prod-db.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.18.0",
+    "franc": "^6.2.0",
     "lucide-react": "^0.542.0",
     "next": "15.5.2",
     "next-auth": "^4.24.11",

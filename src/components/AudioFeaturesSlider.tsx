@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { Check, X, PlusCircle } from "lucide-react";
+import React, { useState, } from "react";
+import { X, PlusCircle } from "lucide-react";
 import { Track } from "@prisma/client";
+import LanguageFilter from "./LanguageFilter";
 
 type FilterValue = {
   min: number;
@@ -99,6 +100,35 @@ const AUDIO_FEATURES: AudioFeature[] = [
   },
 ];
 
+const AVAILABLE_LANGUAGES = [
+  'English',
+  'Spanish',
+  'Portuguese',
+  'French',
+  'German',
+  'Italian',
+  'Japanese',
+  'Korean',
+  'Chinese',
+  'Dutch',
+  'Swedish',
+  'Norwegian',
+  'Danish',
+  'Finnish',
+  'Polish',
+  'Russian',
+  'Turkish',
+  'Arabic',
+  'Hindi',
+  'Thai',
+  'Vietnamese',
+  'Indonesian',
+  'Greek',
+  'Czech',
+  'Hungarian',
+  'Romanian',
+]
+
 export default function AudioFeaturesSlider() {
   const [filters, setFilters] = useState<Filters>(
     AUDIO_FEATURES.reduce((acc, feature) => {
@@ -118,6 +148,7 @@ export default function AudioFeaturesSlider() {
   const [selectedTracks, setSelectedTracks] = useState<Set<string>>(new Set());
   const [creatingPlaylist, setCreatingPlaylist] = useState<boolean>(false);
   const [playlistSuccess, setPlaylistSuccess] = useState<string | null>(null);
+  const [selectedLang, setSelectedLang] = useState<string | null>(null);
 
   const toggleTrackSelection = (spotifyId: string) => {
     setSelectedTracks(prev => {
@@ -217,6 +248,7 @@ export default function AudioFeaturesSlider() {
         return acc
       }, {} as Filters)
     );
+    setSelectedLang(null);
     setTracks([]);
   };
 
@@ -225,7 +257,10 @@ export default function AudioFeaturesSlider() {
     setError(null);
 
     try {
-      const body: Record<string, number> = {};
+      const body: Record<string, string | number> = {};
+      if (selectedLang) {
+        body["language"] = selectedLang;
+      }
       Object.keys(filters).forEach(key => {
         if (filters[key].enabled) {
           const feature = AUDIO_FEATURES.find(f => f.key === key);
@@ -272,13 +307,18 @@ export default function AudioFeaturesSlider() {
 
         <div className="bg-slate-800/50 backdrop-blur rounded-xl p-6 mb-6 border border-slate-700">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold">Audio Features</h2>
+            <h2 className="text-lg md:text-2xl font-semibold">Audio Features</h2>
             <button
               onClick={resetFilters}
               className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
             >
               Reset All
             </button>
+            <LanguageFilter 
+              availableLanguages={AVAILABLE_LANGUAGES}
+              selectedLanguage={selectedLang}
+              onChange={setSelectedLang}
+            />
           </div>
 
           <div className="space-y-6">

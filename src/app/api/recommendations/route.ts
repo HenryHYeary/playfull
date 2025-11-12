@@ -6,6 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
+      language,
       minDanceability,
       maxDanceability,
       minEnergy,
@@ -27,52 +28,62 @@ export async function POST(request: NextRequest) {
 
     const safeLimit = Math.min(Math.max(1, parseInt(limit) || 50), 100);
 
-    const where: Prisma.TrackWhereInput = {};
+    // Technically safer
 
-    if (minDanceability !== undefined || maxDanceability !== undefined) {
-      where.danceability = {};
-      if (minDanceability !== undefined) where.danceability.gte = minDanceability;
-      if (maxDanceability !== undefined) where.danceability.lte = maxDanceability;
-    }
-    if (minEnergy !== undefined || maxEnergy !== undefined) {
-      where.energy = {};
-      if (minEnergy !== undefined) where.energy.gte = minEnergy;
-      if (maxEnergy !== undefined) where.energy.lte = maxEnergy;
-    }
-    if (minValence !== undefined || maxValence !== undefined) {
-      where.valence = {};
-      if (minValence !== undefined) where.valence.gte = minValence;
-      if (maxValence !== undefined) where.valence.lte = maxValence;
-    }
-    if (minTempo !== undefined || maxTempo !== undefined) {
-      where.tempo = {};
-      if (minTempo !== undefined) where.tempo.gte = minTempo;
-      if (maxTempo !== undefined) where.tempo.lte = maxTempo;
-    }
-    if (minAcousticness !== undefined || maxAcousticness !== undefined) {
-      where.acousticness = {};
-      if (minAcousticness !== undefined) where.acousticness.gte = minAcousticness;
-      if (maxAcousticness !== undefined) where.acousticness.lte = maxAcousticness;
-    }
-    if (minInstrumentalness !== undefined || maxInstrumentalness !== undefined) {
-      where.instrumentalness = {};
-      if (minInstrumentalness !== undefined) where.instrumentalness.gte = minInstrumentalness;
-      if (maxInstrumentalness !== undefined) where.instrumentalness.lte = maxInstrumentalness;
-    }
-    if (minSpeechiness !== undefined || maxSpeechiness !== undefined) {
-      where.speechiness = {};
-      if (minSpeechiness !== undefined) where.speechiness.gte = minSpeechiness;
-      if (maxSpeechiness !== undefined) where.speechiness.lte = maxSpeechiness;
-    }
-    if (minLiveness !== undefined || maxLiveness !== undefined) {
-      where.liveness = {};
-      if (minLiveness !== undefined) where.liveness.gte = minLiveness;
-      if (maxLiveness !== undefined) where.liveness.lte = maxLiveness;
-    }
+    // const where: Prisma.TrackWhereInput = {};
 
-    const totalCount = await prisma.track.count({ where });
+    // if (language) {
+    //   where.language = language;
+    // }
+
+    // if (minDanceability !== undefined || maxDanceability !== undefined) {
+    //   where.danceability = {};
+    //   if (minDanceability !== undefined) where.danceability.gte = minDanceability;
+    //   if (maxDanceability !== undefined) where.danceability.lte = maxDanceability;
+    // }
+    // if (minEnergy !== undefined || maxEnergy !== undefined) {
+    //   where.energy = {};
+    //   if (minEnergy !== undefined) where.energy.gte = minEnergy;
+    //   if (maxEnergy !== undefined) where.energy.lte = maxEnergy;
+    // }
+    // if (minValence !== undefined || maxValence !== undefined) {
+    //   where.valence = {};
+    //   if (minValence !== undefined) where.valence.gte = minValence;
+    //   if (maxValence !== undefined) where.valence.lte = maxValence;
+    // }
+    // if (minTempo !== undefined || maxTempo !== undefined) {
+    //   where.tempo = {};
+    //   if (minTempo !== undefined) where.tempo.gte = minTempo;
+    //   if (maxTempo !== undefined) where.tempo.lte = maxTempo;
+    // }
+    // if (minAcousticness !== undefined || maxAcousticness !== undefined) {
+    //   where.acousticness = {};
+    //   if (minAcousticness !== undefined) where.acousticness.gte = minAcousticness;
+    //   if (maxAcousticness !== undefined) where.acousticness.lte = maxAcousticness;
+    // }
+    // if (minInstrumentalness !== undefined || maxInstrumentalness !== undefined) {
+    //   where.instrumentalness = {};
+    //   if (minInstrumentalness !== undefined) where.instrumentalness.gte = minInstrumentalness;
+    //   if (maxInstrumentalness !== undefined) where.instrumentalness.lte = maxInstrumentalness;
+    // }
+    // if (minSpeechiness !== undefined || maxSpeechiness !== undefined) {
+    //   where.speechiness = {};
+    //   if (minSpeechiness !== undefined) where.speechiness.gte = minSpeechiness;
+    //   if (maxSpeechiness !== undefined) where.speechiness.lte = maxSpeechiness;
+    // }
+    // if (minLiveness !== undefined || maxLiveness !== undefined) {
+    //   where.liveness = {};
+    //   if (minLiveness !== undefined) where.liveness.gte = minLiveness;
+    //   if (maxLiveness !== undefined) where.liveness.lte = maxLiveness;
+    // }
+
+    // const totalCount = await prisma.track.count({ where });
 
     const conditions: Prisma.Sql[] = [];
+
+    if (language) {
+      conditions.push(Prisma.sql`language = ${language}`)
+    }
     
     if (minDanceability !== undefined) {
       conditions.push(Prisma.sql`danceability >= ${minDanceability}`);
@@ -134,6 +145,7 @@ export async function POST(request: NextRequest) {
         "spotifyId",
         "trackName",
         "artistName",
+        language,
         danceability,
         energy,
         valence,
@@ -152,7 +164,8 @@ export async function POST(request: NextRequest) {
       success: true,
       tracks,
       count: tracks.length,
-      totalMatches: totalCount,
+      // Unnecessary property
+      // totalMatches: totalCount,
     });
   } catch (error) {
     console.error('Error fetching recommendations:', error);
