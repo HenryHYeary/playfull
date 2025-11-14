@@ -12,12 +12,6 @@ Playfull helps you discover new music that matches your taste. Using Spotify's a
 - Filter by language preferences
 - **Coming soon**: Genre filters
 
-**Key features**:
-- Generate playlists up to 50 songs from over 130,000 tracks.
-- Track feature selection via 8 different audio attributes.
-- Language filters (still WIP for accuracy)
-- **Soon to come**: genre filters
-
 ## Motivation
 
 Spotify's algorithm is great at recommending similar music, but sometimes you want to discover something *different* while staying within your taste profile. Playfull lets you explore the edges of your musical preferences through fine-grained audio feature controls.
