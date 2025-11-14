@@ -5,6 +5,7 @@ export async function GET(request: NextRequest) {
   try {
     const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
     const accessToken = token?.accessToken;
+    const userId = token?.userId;
     
     if (!token?.accessToken) {
       return NextResponse.json(
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
     }
 
     const response = await fetch(
-      'https://api.spotify.com/v1/me/playlists?limit=5',
+      'https://api.spotify.com/v1/me/playlists',
       {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -30,13 +31,15 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      playlists: data.items.map((playlist: any) => ({
-        id: playlist.id,
-        name: playlist.name,
-        url: playlist.external_urls.spotify,
-        trackCount: playlist.tracks.total,
-        image: playlist.images[0]?.url,
-      })),
+      playlists: data.items
+        .filter((playlist: any) => playlist.owner.id === userId)
+        .map((playlist: any) => ({
+          id: playlist.id,
+          name: playlist.name,
+          url: playlist.external_urls.spotify,
+          trackCount: playlist.tracks.total,
+          image: playlist.images[0]?.url,
+        })),
     });
 
   } catch (error) {
