@@ -16,7 +16,7 @@ export interface NavItem {
 
 export const navigationItems: NavItem[] = [
   { label: "Home", icon: Home, href: "/" },
-  { label: "Create Playlist", icon: PlusSquare, href: "/create", section: "CREATE" },
+  { label: "Create / Add", icon: PlusSquare, href: "/create", section: "CREATE" },
 ];
 
 export function NavigationItems({ onClick }: { onClick?: () => void }) {
