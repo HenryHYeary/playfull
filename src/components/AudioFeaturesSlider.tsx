@@ -360,11 +360,11 @@ export default function AudioFeaturesSlider({ addingToPlaylistId, addingToPlayli
         }
 
         <div className="bg-slate-800/50 backdrop-blur rounded-xl p-6 mb-6 border border-slate-700">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
             <h2 className="text-lg md:text-2xl font-semibold">Audio Features</h2>
             <button
               onClick={resetFilters}
-              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
+              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition mb-3 mt-3"
             >
               Reset All
             </button>
