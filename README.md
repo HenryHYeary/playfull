@@ -12,7 +12,7 @@ Playfull helps you discover new music that matches your taste. Using Spotify's a
 - Filter by language preferences
 - **Coming soon**: Genre filters
 
-[Playfull Demo]("./demo/Playfull_Demo.gif")
+[Playfull Demo](./demo/Playfull_Demo.gif)
 
 ## Motivation
 
