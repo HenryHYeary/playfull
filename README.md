@@ -34,3 +34,6 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+Demo Access: This app is currently in Spotify Development Mode. 
+To try it out, please reach out to me on LinkedIn (www.linkedin.com/in/henry-yeary-9b0901182) with your Spotify email address and I'll add you to the allowlist within 24 hours.
