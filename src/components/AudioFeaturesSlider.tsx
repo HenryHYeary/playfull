@@ -519,7 +519,7 @@ export default function AudioFeaturesSlider({ addingToPlaylistId, addingToPlayli
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
                   <input
                     value={playlistName}
                     onChange={(e) => setPlaylistName(e.target.value)}
