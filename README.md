@@ -1,39 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Playfull
 
-## Getting Started
+A fine-tuned playlist generation app to find new musical inspiration.
 
-First, run the development server:
+## About
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Playfull helps you discover new music that matches your taste. Using Spotify's audio features data, it generates curated playlists based on specific musical attributes like danceability, energy, tempo, and more—giving you fresh recommendations that feel both surprising and familiar.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Key Features:**
+- Generate random playlists up to 50 songs from a library of 130,000+ tracks
+- Fine-tune recommendations using 8 audio attributes (danceability, energy, valence, etc.)
+- Filter by language preferences
+- **Coming soon**: Genre filters
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Key features**:
+- Generate playlists up to 50 songs from over 130,000 tracks.
+- Track feature selection via 8 different audio attributes.
+- Language filters (still WIP for accuracy)
+- **Soon to come**: genre filters
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Motivation
 
-## Learn More
+Spotify's algorithm is great at recommending similar music, but sometimes you want to discover something *different* while staying within your taste profile. Playfull lets you explore the edges of your musical preferences through fine-grained audio feature controls.
 
-To learn more about Next.js, take a look at the following resources:
+## Demo Access
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This app is currently in Spotify Development Mode.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-Demo Access: This app is currently in Spotify Development Mode. 
-To try it out, please reach out to me on LinkedIn (www.linkedin.com/in/henry-yeary-9b0901182) with your Spotify email address and I'll add you to the allowlist within 24 hours.
+To try it out, please reach out to me on [LinkedIn](https://www.linkedin.com/in/henry-yeary-9b0901182) with your Spotify email address and I'll add you to the allowlist within 24 hours.
