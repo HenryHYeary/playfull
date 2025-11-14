@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, } from "react";
-import { X, PlusCircle } from "lucide-react";
 import { Track } from "@prisma/client";
 import LanguageFilter from "./LanguageFilter";
 
@@ -129,7 +128,7 @@ const AVAILABLE_LANGUAGES = [
   'Romanian',
 ]
 
-export default function AudioFeaturesSlider() {
+export default function AudioFeaturesSlider({ addingToPlaylistId, addingToPlaylistName }: { addingToPlaylistId: string | null, addingToPlaylistName?: string | null}) {
   const [filters, setFilters] = useState<Filters>(
     AUDIO_FEATURES.reduce((acc, feature) => {
       acc[feature.key] = {
@@ -198,7 +197,7 @@ export default function AudioFeaturesSlider() {
       const data = await response.json();
 
       if (data.success) {
-        setPlaylistSuccess(`Playlist created! ${data.trackCount} tracks added.`);
+        setPlaylistSuccess(`Playlist created! ${data.trackCount ?? Array.from(selectedTracks).length} tracks added.`);
         setPlaylistName("");
         setSelectedTracks(new Set());
 
@@ -215,6 +214,47 @@ export default function AudioFeaturesSlider() {
     }
   }
 
+  // add tracks to an existing playlist (batched on the server)
+  const addToExistingPlaylist = async (playlistId?: string | null) => {
+    if (!playlistId) {
+      setError("No playlist specified");
+      return;
+    }
+    if (selectedTracks.size === 0) {
+      setError("Please select at least one track");
+      return;
+    }
+
+    setCreatingPlaylist(true);
+    setError(null);
+    setPlaylistSuccess(null);
+
+    try {
+      const response = await fetch("/api/playlist/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playlistId,
+          trackIds: Array.from(selectedTracks),
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        const added = data.added ?? Array.from(selectedTracks).length;
+        setPlaylistSuccess(`Added ${added} track${added === 1 ? "" : "s"} to ${addingToPlaylistName ?? playlistId}.`);
+        setSelectedTracks(new Set());
+        // optionally navigate to the playlist in Spotify:
+        if (data.playlistUrl) window.open(data.playlistUrl, "_blank");
+      } else {
+        setError(data.error || "Failed to add tracks to playlist");
+      }
+    } catch (err) {
+      setError("Network error: " + (err instanceof Error ? err.message : "Unknown error"));
+    } finally {
+      setCreatingPlaylist(false);
+    }
+  }
 
   const updateFilter = (key: string, type: "min" | "max", value: string) => {
     setFilters(prev => ({
@@ -301,9 +341,23 @@ export default function AudioFeaturesSlider() {
         <h1 className="text-4xl font-bold mb-2 text-center">
           Playfull Playlist Generator
         </h1>
-        <p className="text-center text-slate-300 mb-8">
+        <p className="text-center text-slate-300 mb-4">
           Adjust audio features to find your perfect tracks
         </p>
+
+        {(addingToPlaylistId && addingToPlaylistName) && 
+        <div>
+          <p className="font-semibold text-center mb-8">Adding to {addingToPlaylistName}</p>
+          <p
+            role="button"
+            tabIndex={0}
+            className="font-semibold text-center cursor-pointer mb-3 underline"
+            onClick={() => window.location.href = "/create"}
+          >
+            Create a new playlist
+          </p>
+        </div>
+        }
 
         <div className="bg-slate-800/50 backdrop-blur rounded-xl p-6 mb-6 border border-slate-700">
           <div className="flex justify-between items-center mb-6">
@@ -433,70 +487,69 @@ export default function AudioFeaturesSlider() {
               ))}
             </div>
 
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-4">
-              <div className="flex pt-2 items-center space-x-3">
-                <button
-                  onClick={selectAllTracks}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 text-white rounded-md shadow-md transition"
-                >
-                  <PlusCircle className="w-4 h-4" />
-                  <span className="font-medium text-xs sm:text-lg">Select all songs</span>
-                </button>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              {addingToPlaylistId ? (
+                <div className="flex items-center gap-3 w-full sm:w-auto mt-3">
+                  <div className="text-sm text-slate-200">
+                    Adding to <span className="font-semibold">{addingToPlaylistName}</span>
+                  </div>
 
-                <button
-                  onClick={deselectAllTracks}
+                  <button
+                    onClick={() => addToExistingPlaylist?.(addingToPlaylistId)}
+                    disabled={creatingPlaylist || selectedTracks.size === 0}
+                    className={`px-4 py-2 rounded-md text-white ${
+                      creatingPlaylist ? "bg-gray-500 cursor-wait" : "bg-indigo-600 hover:bg-indigo-700"
+                    }`}
+                  >
+                    {creatingPlaylist ? "Adding…" : `Add ${selectedTracks.size || 0} track${selectedTracks.size === 1 ? "" : "s"}`}
+                  </button>
+                  
+                  <button
+                    onClick={selectAllTracks}
+                    className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
+                  >
+                    Select All Tracks
+                  </button>
 
-                  className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-200 rounded-md transition"
-                >
-                  <X className="w-4 h-4" />
-                  <span className="text-xs sm:text-lg">Clear</span>
-                </button>
-
-                <span className="text-sm text-slate-400 ml-2">
-                  {selectedTracks.size} selected
-                </span>
-              </div>
-
-              <div className="flex flex-col items-start space-y-2">
-                <label className="text-sm sm:text-lg sm:pt-3 text-slate-300">Playlist name</label>
-                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={deselectAllTracks}
+                    className="px-3 py-2 text-sm text-slate-300 bg-white/5 rounded-md hover:bg-white/10"
+                  >
+                    Clear
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   <input
                     value={playlistName}
                     onChange={(e) => setPlaylistName(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === "Enter") createPlaylist(); }}
-                    placeholder="e.g. Morning Run"
-                    maxLength={80}
-                    className="bg-white text-black rounded-md px-3 py-2 w-56 focus:outline-none"
+                    placeholder="Playlist name"
+                    className="bg-white text-black rounded-md px-3 py-2 flex-1 sm:flex-none sm:w-56"
                   />
-
+                  <button
+                    onClick={selectAllTracks}
+                    className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
+                  >
+                    Select All Tracks
+                  </button>
                   <button
                     onClick={createPlaylist}
-                    disabled={creatingPlaylist}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-white ${
+                    disabled={creatingPlaylist || selectedTracks.size === 0}
+                    className={`px-4 py-2 rounded-md text-white ${
                       creatingPlaylist ? "bg-gray-500 cursor-wait" : "bg-green-500 hover:bg-green-600"
                     }`}
-                    aria-busy={creatingPlaylist}
                   >
-                    {creatingPlaylist ? (
-                      // small inline spinner
-                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                      </svg>
-                    ) : (
-                      <span></span>
-                    )}
-                    <span className="text-sm sm:text-lg">{creatingPlaylist ? "Creating..." : "Create"}</span>
+                    {creatingPlaylist ? "Creating…" : "Create"}
+                  </button>
+                  <p>{selectedTracks.size} selected</p>
+                  <button
+                    onClick={deselectAllTracks}
+                    className="px-3 py-2 text-sm text-slate-300 bg-white/5 rounded-md hover:bg-white/10"
+                  >
+                    Clear
                   </button>
                 </div>
-
-                {playlistSuccess && (
-                  <p className="text-sm text-green-400 mt-1">{playlistSuccess}</p>
-                )}
-                {error && (
-                  <p className="text-sm text-red-400 mt-1">{error}</p>
-                )}
-              </div>
+              )}
             </div>
           </div>
         )}

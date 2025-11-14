@@ -28,8 +28,8 @@ export async function createSpotifyPlaylist(
 
   const trackUris = trackIds.map(id => `spotify:track:${id}`);
 
-  for (let i = 0; i < trackUris.length; i += 100) {
-    const batch = trackUris.slice(i, i + 100);
+  for (let i = 0; i < trackUris.length; i += 50) {
+    const batch = trackUris.slice(i, i + 50);
 
     await fetch(
       `https://api.spotify.com/v1/playlists/${playlist.id}/tracks`,
@@ -48,5 +48,39 @@ export async function createSpotifyPlaylist(
     playlistId: playlist.id,
     playlistUrl: playlist.external_urls.spotify,
     trackCount: trackIds.length,
+  };
+}
+
+// add this helper to handle adding tracks to an existing playlist (batched)
+export async function addTracksToPlaylist(
+  accessToken: string,
+  playlistId: string,
+  trackIds: string[]
+) {
+  // convert ids to URIs if necessary
+  const uris = trackIds.map((id) => (id.startsWith("spotify:") ? id : `spotify:track:${id}`));
+
+  for (let i = 0; i < uris.length; i += 50) {
+    const batch = uris.slice(i, i + 50);
+    const res = await fetch(`https://api.spotify.com/v1/playlists/${encodeURIComponent(playlistId)}/tracks`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ uris: batch }),
+    });
+
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(`Failed to add tracks: ${res.status} ${JSON.stringify(body)}`);
+    }
+  }
+
+  return {
+    success: true,
+    playlistId,
+    playlistUrl: `https://open.spotify.com/playlist/${playlistId}`,
+    added: trackIds.length,
   };
 }
