@@ -51,7 +51,6 @@ export async function createSpotifyPlaylist(
   };
 }
 
-// add this helper to handle adding tracks to an existing playlist (batched)
 export async function addTracksToPlaylist(
   accessToken: string,
   playlistId: string,
