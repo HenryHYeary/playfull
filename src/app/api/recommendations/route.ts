@@ -112,9 +112,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       tracks,
-      count: tracks.length,
-      // Unnecessary property
-      // totalMatches: totalCount,
+      count: tracks.length
     });
   } catch (error) {
     console.error('Error fetching recommendations:', error);
