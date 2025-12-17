@@ -19,7 +19,7 @@
     "@prisma/client": "^6.18.0",
     "franc": "^6.2.0",
     "lucide-react": "^0.542.0",
-    "next": "15.5.2",
+    "next": "^15.5.9",
     "next-auth": "^4.24.11",
     "papaparse": "^5.4.1",
     "prisma": "^6.18.0",
